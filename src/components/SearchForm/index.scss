@@ -1,0 +1,28 @@
+.search-form {
+  display: flex;
+  justify-content: flex-end;
+  .ant-form-item-control {
+    margin-bottom: 10px;
+    .base-input,
+    .base-select,
+    .base-date-picker {
+      width: 140px;
+    }
+  }
+}
+@media screen and (max-width: 767px) {
+  .search-form {
+    // width: 100%;
+    display: flex;
+    justify-content: space-between;
+    .ant-form-item {
+      margin-right: 0;
+      width: calc(50% - 8px);
+      .base-input,
+      .base-select,
+      .base-date-picker {
+        width: 100%;
+      }
+    }
+  }
+}

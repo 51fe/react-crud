@@ -1,0 +1,8 @@
+#app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  .action-column {
+    display: flex;
+  }
+}
