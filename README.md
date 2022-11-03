@@ -6,9 +6,10 @@
 2. Base search/ pagination/sort
 3. Chinese areas cascader, Custom components/data access/form validator
 4. Responsive design
+5. Uint test
 
 ## Snapshots
-![vue crud](https://www.riafan.com/github/react-crud.jpg)
+![vue crud](https://www.riafan.com/github/vue-crud.jpg)
 
 
 ## Project setup
@@ -25,6 +26,12 @@ npm run mock
 ```
 npm run start
 ```
+
+### Uint test
+```
+npm run test:unit
+```
+
 ### Customize configuration
 See [Configuration Reference](https://create-react-app.dev).
 

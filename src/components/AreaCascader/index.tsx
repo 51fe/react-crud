@@ -3,17 +3,19 @@ import { DefaultOptionType } from 'antd/lib/cascader'
 import { SingleValueType } from 'rc-cascader/lib/Cascader'
 import areas from './area'
 
-interface IAreaCascaderProps {
+interface AreaCascaderProps {
+  id?: string
   value?: number
   onChange?: (value?: number, paths?: string[]) => void
   placeholder?: string
 }
 
 const AreaCascader = ({
+  id,
   value,
   onChange,
   placeholder = '请选择'
-}: IAreaCascaderProps) => {
+}: AreaCascaderProps) => {
   let _value: number[] = []
   if (value) {
     _value = [
@@ -41,6 +43,7 @@ const AreaCascader = ({
   }
   return (
     <Cascader
+      id={id}
       value={_value}
       options={areas}
       placeholder={placeholder}

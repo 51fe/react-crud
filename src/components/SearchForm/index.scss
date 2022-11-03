@@ -1,28 +1,23 @@
 .search-form {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
-  .ant-form-item-control {
+  .ant-form-item {
+    margin-right: 10px;
     margin-bottom: 10px;
-    .base-input,
+    .el-input,
     .base-select,
     .base-date-picker {
       width: 140px;
     }
-  }
-}
-@media screen and (max-width: 767px) {
-  .search-form {
-    // width: 100%;
-    display: flex;
-    justify-content: space-between;
-    .ant-form-item {
-      margin-right: 0;
-      width: calc(50% - 8px);
-      .base-input,
-      .base-select,
-      .base-date-picker {
-        width: 100%;
-      }
+    .el-input+.el-input {
+      margin-left: 10px;
+    }
+    .base-select+.base-select {
+      margin-left: 10px;
+    }
+    .el-button {
+      margin-left: 20px;
     }
   }
 }

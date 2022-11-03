@@ -8,7 +8,8 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 
 moment.locale('zh-cn')
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+const container = document.getElementById('root') as HTMLElement
+const root = ReactDOM.createRoot(container)
 root.render(
   <React.StrictMode>
     <ConfigProvider

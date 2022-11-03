@@ -1,17 +1,21 @@
 import { Input } from 'antd'
-interface IBaseInputProps {
+
+interface BaseInputProps {
+  id?: string
   value?: string
   onChange?: (value: string) => void
   placeholder?: string
 }
 
 const BaseInput = ({
+  id,
   value,
   onChange,
   placeholder = '请输入'
-}: IBaseInputProps) => {
+}: BaseInputProps) => {
   return (
     <Input
+      id={id}
       value={value}
       placeholder={placeholder}
       maxLength={200}

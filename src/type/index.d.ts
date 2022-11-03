@@ -1,13 +1,14 @@
 import { DatePickerProps } from 'antd'
 
+export { }
 declare global {
-  export type Moment = DatePickerProps['value']
+  type Moment = DatePickerProps['value']
 
-  export type BaseValue = string | number
+  type BaseValue = string | number
 
-  export type SelectValue = BaseValue | BaseValue[]
+  type SelectValue = BaseValue | BaseValue[]
 
-  export interface IOption {
+  interface Option {
     label: string
     value: BaseValue
     children?: Array<{
@@ -16,15 +17,19 @@ declare global {
     }>
   }
 
-  export interface ITable<T> {
+  interface PageTable<T> {
     list: T[]
     total: number
   }
 
-  export interface IParams {
+  interface Params {
     _page: number
     _limit: number
     _sort: string
     _order: string
+  }
+
+  type FormRule<T> = {
+    [key in keyof T]: AggregationRule[]
   }
 }

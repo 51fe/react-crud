@@ -6,9 +6,10 @@
 2. 支持基本的搜索、分页、排序
 3. 中国市区级联、自定义组件/数据访问/表单验证
 4. 响应式布局
+5. 单元测试
 
 ## 截图
-![vue crud](https://www.riafan.com/github/react-crud.jpg)
+![vue crud](https://www.riafan.com/github/vue-crud.jpg)
 
 
 ## 项目设置
@@ -25,6 +26,12 @@ npm run mock
 ```
 npm run start
 ```
+
+### 单元测试
+```
+npm run test:unit
+```
+
 ### 自定义配置
 详见 [配置参考](https://create-react-app.dev).
 

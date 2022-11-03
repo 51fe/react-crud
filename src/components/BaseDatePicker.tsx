@@ -1,22 +1,25 @@
 import moment from 'moment'
 import { DatePicker } from 'antd'
 
-interface IBaseDatePickerProps {
+interface BaseDatePickerProps {
+  id?: string
   value?: string
   onChange?: (dataString: string) => void
   placeholder?: string
 }
 
 const BaseDatePicker = ({
+  id,
   value,
   onChange,
-  placeholder = '请输入'
-}: IBaseDatePickerProps) => {
+  placeholder = '请选择'
+}: BaseDatePickerProps) => {
   const handleChange = (value: Moment) => {
-    onChange?.(value?.format('YYYY-MM-DD HH:mm:ss') as string)
+    onChange?.(value?.format('YYYY-MM-DD 00:00:00') as string)
   }
   return (
     <DatePicker
+      id={id}
       value={value ? moment(value) : undefined}
       placeholder={placeholder}
       allowClear

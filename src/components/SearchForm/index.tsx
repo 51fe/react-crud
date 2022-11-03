@@ -5,14 +5,14 @@ import options from '../AreaCascader/area'
 import BaseDatePicker from '../BaseDatePicker'
 import BaseInput from '../BaseInput'
 import BaseSelect from '../BaseSelect'
-import { IQuery } from '../../type/receipt'
+import { ReceiptQuery } from '../../type/receipt'
 import { useState } from 'react'
 
-interface ISearchProps {
-  onSearch: (value: IQuery) => void
+interface SearchProps {
+  onSearch: (value: ReceiptQuery) => void
 }
 
-const SearchForm = ({ onSearch }: ISearchProps) => {
+const SearchForm = ({ onSearch }: SearchProps) => {
   const [form] = Form.useForm()
   const provinces = options.map((item) => {
     return {
@@ -21,8 +21,8 @@ const SearchForm = ({ onSearch }: ISearchProps) => {
     }
   })
 
-  const [cities, setCities] = useState<IOption[]>([])
-  const changeProvice = (value: SelectValue) => {
+  const [cities, setCities] = useState<Option[]>([])
+  const changeProvince = (value: SelectValue) => {
     // reset
     form.setFieldValue('area_like', undefined)
     form.setFieldValue('area', undefined)
@@ -33,7 +33,7 @@ const SearchForm = ({ onSearch }: ISearchProps) => {
     if (value) {
       const children = options.find((item) => item.label === value)?.children
       if (children != null) {
-        const value: IOption[] = children?.map((item) => {
+        const value: Option[] = children?.map((item) => {
           return {
             label: item.label,
             // 1...4 for city area code
@@ -46,7 +46,7 @@ const SearchForm = ({ onSearch }: ISearchProps) => {
     }
   }
 
-  const [areas, setAreas] = useState<IOption[]>([])
+  const [areas, setAreas] = useState<Option[]>([])
   const changeCity = (value: SelectValue) => {
     // reset
     form.setFieldValue('area', undefined)
@@ -60,7 +60,7 @@ const SearchForm = ({ onSearch }: ISearchProps) => {
     }
   }
 
-  const onFinish = (values: IQuery) => {
+  const onFinish = (values: ReceiptQuery) => {
     onSearch(values)
   }
 
@@ -71,6 +71,7 @@ const SearchForm = ({ onSearch }: ISearchProps) => {
       colon={false}
       onFinish={onFinish}
       autoComplete="off"
+      data-testid="search-form"
       className="search-form"
     >
       <Form.Item name="userName_like">
@@ -93,7 +94,7 @@ const SearchForm = ({ onSearch }: ISearchProps) => {
         <BaseSelect
           options={provinces}
           placeholder="请选择省"
-          onChange={changeProvice}
+          onChange={changeProvince}
         />
       </Form.Item>
 
@@ -116,6 +117,7 @@ const SearchForm = ({ onSearch }: ISearchProps) => {
         <Button
           type="primary"
           htmlType="submit"
+          title='搜索'
           icon={<SearchOutlined />}
         />
       </Form.Item>

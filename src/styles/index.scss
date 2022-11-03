@@ -1,4 +1,4 @@
-@import "~antd/dist/antd.css";
+@import '~antd/dist/antd.css';
 
 ::-webkit-scrollbar-track-piece {
   background-color: rgba(0, 0, 0, 0);
@@ -50,7 +50,6 @@ dd {
   width: 100%;
 
   .ant-table-body {
-    height: 785px;
     overflow: auto !important;
   }
 }

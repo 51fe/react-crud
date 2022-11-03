@@ -3,3 +3,13 @@
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom'
+
+beforeAll(() => {
+  jest.spyOn(console, 'warn')
+  global.matchMedia = global.matchMedia || function () {
+    return {
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+    }
+  }
+})

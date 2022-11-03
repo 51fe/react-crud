@@ -1,10 +1,9 @@
 import { Select } from 'antd'
 
-interface IBaseSelectProps {
-  options: IOption[]
+export interface BaseSelectProps {
+  options: Option[]
   value?: SelectValue
   onChange?: (value: SelectValue) => void
-  mode?: 'multiple' | 'tags'
   placeholder?: string
 }
 const { Option } = Select
@@ -12,9 +11,8 @@ const BaseSelect = ({
   options,
   value,
   onChange,
-  mode,
   placeholder = '请选择'
-}: IBaseSelectProps) => {
+}: BaseSelectProps) => {
   const list = options.map((item) => (
     <Option
       value={item.value}
@@ -26,7 +24,6 @@ const BaseSelect = ({
   return (
     <Select
       showSearch
-      mode={mode}
       value={value}
       placeholder={placeholder}
       optionFilterProp="children"

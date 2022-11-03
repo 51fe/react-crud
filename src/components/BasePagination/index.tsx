@@ -2,8 +2,8 @@ import './index.scss'
 import { Pagination } from 'antd'
 import { scrollTo } from '../../utils/scroll-to'
 
-interface IBasePaginationProps {
-  total?: number
+interface BasePaginationProps {
+  total: number
   page?: number
   limit?: number
   showSizeChanger?: boolean
@@ -23,7 +23,7 @@ const BasePagination = ({
   autoScroll = true,
   hidden,
   pagination
-}: IBasePaginationProps) => {
+}: BasePaginationProps) => {
   const onChange = (current: number, pageSize: number) => {
     pagination?.(current, pageSize)
     if (autoScroll) {
@@ -33,10 +33,11 @@ const BasePagination = ({
   return (
     <div className={hidden ? 'pagination-container hidden' : 'pagination-container '}>
       <Pagination
+        total={total}
         current={page}
         pageSize={limit}
         pageSizeOptions={[15, 30, 50, 100]}
-        total={total}
+        showTotal={total => `共 ${total} 条`}
         showSizeChanger={showSizeChanger}
         showQuickJumper={showQuickJumper}
         onChange={onChange}

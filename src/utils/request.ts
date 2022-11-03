@@ -39,10 +39,8 @@ service.interceptors.response.use(
       const count = headers['x-total-count']
       if (count) {
         return {
-          data: {
-            list: data,
-            total: parseInt(count)
-          }
+          list: data,
+          total: parseInt(count)
         }
       }
       return data
@@ -54,9 +52,9 @@ service.interceptors.response.use(
   }
 )
 
-function getAction (config: AxiosRequestConfig, status?: number) {
+function getAction(config: AxiosRequestConfig, status?: number) {
   let action = ''
-  if(status === 201) {
+  if (status === 201) {
     action = '新增'
   } else {
     const method = config?.method?.toLocaleLowerCase() ?? ''

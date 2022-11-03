@@ -1,17 +1,17 @@
 import './index.scss'
+import { useEffect } from 'react'
 import { Button, Form, Space } from 'antd'
 import AreaCascader from '../AreaCascader'
 import BaseInput from '../BaseInput'
 import BaseDatePicker from '../BaseDatePicker'
-import { IForm } from '../../type/receipt'
-import { useEffect } from 'react'
-import { mobileValidator } from '../../utils/validate'
+import { Receipt } from '../../type/receipt'
+import { formRule } from './form-rule'
 
-interface ISaveFormProps {
-  initialValues: IForm
-  loading: boolean
-  opened: boolean
-  onSubmit: (values: IForm) => void
+interface SaveFormProps {
+  initialValues: Receipt
+  loading?: boolean
+  opened?: boolean
+  onSubmit?: (values: Receipt) => void
   onCancle?: () => void
 }
 const SaveForm = ({
@@ -20,25 +20,25 @@ const SaveForm = ({
   loading,
   onSubmit,
   onCancle
-}: ISaveFormProps) => {
+}: SaveFormProps) => {
   const [form] = Form.useForm()
   let areaName = initialValues.areaName
-  const onFinish = (values: IForm) => {
+  const onFinish = (values: Receipt) => {
     values.id = initialValues.id
     values.areaName = areaName
-    onSubmit(values)
+    onSubmit?.(values)
   }
 
   useEffect(() => {
     form.setFieldsValue(initialValues)
-  }, [form, initialValues.id])
+  }, [initialValues.id])
 
   useEffect(() => {
     if (opened) {
       // clear validation
       form.resetFields()
     }
-  }, [opened])
+  }, [form, opened])
 
   const handleAreaChange = (value?: number, paths?: string[]) => {
     form.setFieldValue('area', value)
@@ -57,44 +57,38 @@ const SaveForm = ({
       <Form.Item
         label="日期"
         name="date"
-        rules={[{ required: true, message: '日期不能为空' }]}
+        rules={ formRule.date }
       >
-        <BaseDatePicker />
+        <BaseDatePicker id="date" />
       </Form.Item>
 
       <Form.Item
         label="姓名"
         name="userName"
-        rules={[{ required: true, message: '姓名不能为空' }]}
+        rules={ formRule.userName }
       >
-        <BaseInput />
+        <BaseInput id="userName" />
       </Form.Item>
       <Form.Item
         label="市区"
         name="area"
-        rules={[{ required: true, message: '市区不能为空' }]}
+        rules={ formRule.area }
       >
-        <AreaCascader onChange={handleAreaChange} />
+        <AreaCascader id="area" onChange={handleAreaChange} />
       </Form.Item>
       <Form.Item
         label="地址"
         name="address"
-        rules={[{ required: true, message: '地址不能为空' }]}
+        rules={ formRule.address }
       >
-        <BaseInput />
+        <BaseInput id="address" />
       </Form.Item>
       <Form.Item
         label="手机号"
         name="mobile"
-        rules={[
-          {
-            required: true,
-            message: '手机号不能为空'
-          },
-          { validator: mobileValidator }
-        ]}
+        rules={ formRule.mobile }
       >
-        <BaseInput />
+        <BaseInput id="mobile"/>
       </Form.Item>
       <Form.Item className="footer-item">
         <Space>
