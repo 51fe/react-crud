@@ -47,8 +47,9 @@ async function filterData(value: PageTable<Receipt>) {
   expect(getReceiptList).toHaveBeenCalledTimes(1)
 }
 
-afterEach(() => {
-  getReceiptList.mockClear()
+beforeEach(() => {
+  jest.resetModules()
+  jest.clearAllMocks()
 })
 
 test('returns all rows by default', async () => {
@@ -71,7 +72,7 @@ test('returns No data if name does not match', async () => {
   filterData({ list: [], total: 0 })
   // sure loaded
   await screen.findByText('', {selector: '.ant-spin-dot'})
-  expect(await screen.findByRole('cell', { name: /暂无数据/ })).toBeInTheDocument()
+  expect(await screen.findByRole('cell', { name: /暂无数据/ })).toBeVisible()
 })
 
 test('calls delReceipt to delete', async () => {

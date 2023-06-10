@@ -8,14 +8,12 @@ export interface Receipt {
   mobile?: string
 }
 
-export type FieldName = Omit<Receipt, 'id' | 'areaName'>
-
 export interface ReceiptQuery {
-  userName_like?: BaseValue
-  mobile_like?: BaseValue
-  date_gte?: BaseValue
-  date_lte?: BaseValue
-  areaName_like?: BaseValue
-  area_like?: BaseValue
-  area?: BaseValue
+  userName_like?: string
+  mobile_like?: string
+  date_gte?: string
+  date_lte?: string
+  areaName_like?: string
+  area_like?: number
+  area?: number
 }

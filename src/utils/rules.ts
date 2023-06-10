@@ -1,6 +1,8 @@
-import { FieldName } from 'type/receipt'
+interface Rules {
+  [key: string]: FormItemRule[];
+}
 
-export const formRule: FormRule<FieldName> = {
+export const rules: Rules = {
   date: [{ required: true, message: '日期不能为空' }],
   userName: [{ required: true, message: '姓名不能为空' }],
   area: [{ required: true, message: '市区不能为空' }],
@@ -11,4 +13,4 @@ export const formRule: FormRule<FieldName> = {
   ]
 }
 
-export default formRule
+export default rules

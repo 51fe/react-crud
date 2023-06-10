@@ -45,5 +45,5 @@ test('calls "onChange"', async () => {
   const select = screen.getByRole('combobox')
   await userEvent.click(select)
   fireEvent.click(screen.getByTitle(/电信/))
-  expect(handleChange.mock.calls[0][0]).toBe(3)
+  expect(handleChange).toHaveBeenCalledWith( 3, { children: '电信', key: '3', value: 3 })
 })

@@ -5,46 +5,46 @@ import AreaCascader from '../AreaCascader'
 import BaseInput from '../BaseInput'
 import BaseDatePicker from '../BaseDatePicker'
 import { Receipt } from '../../type/receipt'
-import { formRule } from './form-rule'
+import { rules } from '../../utils/rules'
 
 interface SaveFormProps {
-  initialValues: Receipt
+  initialValues?: Receipt
   loading?: boolean
-  opened?: boolean
   onSubmit?: (values: Receipt) => void
   onCancle?: () => void
 }
 const SaveForm = ({
   initialValues,
-  opened,
   loading,
   onSubmit,
   onCancle
 }: SaveFormProps) => {
   const [form] = Form.useForm()
-  let areaName = initialValues.areaName
+  let areaName = initialValues?.areaName
   const onFinish = (values: Receipt) => {
-    values.id = initialValues.id
+    values.id = initialValues?.id
     values.areaName = areaName
     onSubmit?.(values)
   }
 
   useEffect(() => {
-    form.setFieldsValue(initialValues)
-  }, [initialValues.id])
-
-  useEffect(() => {
-    if (opened) {
-      // clear validation
+    if(initialValues?.id) { // edit
+      form.setFieldsValue(initialValues)
+    } else {
       form.resetFields()
     }
-  }, [form, opened])
+  }, [initialValues])
 
   const handleAreaChange = (value?: number, paths?: string[]) => {
     form.setFieldValue('area', value)
     areaName = paths?.join('')
   }
 
+  const handleCancel = () => {
+    form.resetFields()
+    onCancle?.()
+  }
+  
   return (
     <Form
       form={form}
@@ -57,7 +57,7 @@ const SaveForm = ({
       <Form.Item
         label="日期"
         name="date"
-        rules={ formRule.date }
+        rules={ rules.date }
       >
         <BaseDatePicker id="date" />
       </Form.Item>
@@ -65,45 +65,45 @@ const SaveForm = ({
       <Form.Item
         label="姓名"
         name="userName"
-        rules={ formRule.userName }
+        rules={ rules.userName }
       >
         <BaseInput id="userName" />
       </Form.Item>
       <Form.Item
         label="市区"
         name="area"
-        rules={ formRule.area }
+        rules={ rules.area }
       >
         <AreaCascader id="area" onChange={handleAreaChange} />
       </Form.Item>
       <Form.Item
         label="地址"
         name="address"
-        rules={ formRule.address }
+        rules={ rules.address }
       >
         <BaseInput id="address" />
       </Form.Item>
       <Form.Item
         label="手机号"
         name="mobile"
-        rules={ formRule.mobile }
+        rules={ rules.mobile }
       >
         <BaseInput id="mobile"/>
       </Form.Item>
       <Form.Item className="footer-item">
         <Space>
           <Button
+            htmlType="button"
+            onClick={handleCancel}
+          >
+            取 消
+          </Button>
+          <Button
             type="primary"
             htmlType="submit"
             loading={loading}
           >
             确 定
-          </Button>
-          <Button
-            htmlType="button"
-            onClick={onCancle}
-          >
-            取 消
           </Button>
         </Space>
       </Form.Item>

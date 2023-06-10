@@ -15,16 +15,16 @@ import { parseDateTime } from './utils'
 const { Column } = Table
 const { confirm } = Modal
 const App = () => {
-  type FormKey = keyof Receipt
   type SearchParams = Params & ReceiptQuery
   const PAGE_SIZE = 15
   const [dialogVisible, setDialogVisible] = useState(false)
-  const [adding, setAdding] = useState(false)
   const [loading, setLoading] = useState(false)
   const [saveLoading, setSaveLoading] = useState(false)
-  const [total, setTotal] = useState(0)
-  const [form, setForm] = useState({} as Receipt)
-  const [tableData, setTableData] = useState<Receipt[]>([])
+  const [form, setForm] = useState<Receipt>()
+  const [tableData, setTableData] = useState<PageTable<Receipt>>({
+    list: [],
+    total: 0
+  })
   const [params, setParams] = useState<Params>({
     _page: 1,
     _limit: PAGE_SIZE,
@@ -50,8 +50,7 @@ const App = () => {
     setLoading(true)
     getReceiptList(params).then((data: PageTable<Receipt>) => {
       setLoading(false)
-      setTableData(data.list)
-      setTotal(data.total)
+      setTableData(data)
     })
     .catch(() => {
       setLoading(false)
@@ -67,44 +66,38 @@ const App = () => {
   }
 
   useEffect(() => {
-    if (!saveLoading) {
-      setDialogVisible(false)
-    }
+    if (!saveLoading) setDialogVisible(false)
   }, [saveLoading])
 
   const toAdd = () => {
-    setAdding(true)
+    setForm({})
     setDialogVisible(true)
-    // reset form
-    const value = { ...form }
-    Object.keys(value).forEach((item) => {
-      const key = item as FormKey
-      value[key] = undefined
-    })
-    setForm(value)
   }
 
   const toEdit = (row: Receipt) => {
-    setAdding(false)
-    setDialogVisible(true)
     setForm(row)
+    setDialogVisible(true)
   }
 
   const toDelete = (id: number) => {
     confirm({
       title: '确定删除?',
       icon: <ExclamationCircleOutlined />,
-      onOk() {
-        return delReceipt(id).then(() => {
+      async onOk() {
+        try {
+          await delReceipt(id)
           // not call fetchData
-          setTableData(tableData.filter(item => item.id !== id))
-          setTotal(total - 1)
-          if(total % params._limit === 0) {
+          const { list, total } = tableData
+          setTableData({
+            list : list.filter(item => item.id !== id),
+            total: total - 1
+          })
+          if (total % params._limit === 0) {
             refresh()
           }
-        }).catch(err => {
+        } catch (err) {
           console.log(err)
-        })
+        }
       },
       onCancel() {
         console.log('canceled')
@@ -127,11 +120,13 @@ const App = () => {
     editReceipt(data).then(() => {
       setSaveLoading(false)
       // not call fetchData
-      setTableData(
-        tableData.map((item) =>
+      const { list, total } = tableData
+      setTableData({
+        list: list.map((item) =>
           item.id === data.id ? { ...item, ...data } : item
-        )
-      )
+        ),
+        total
+      })
     }).catch(() => {
       console.log('update falied')
       setSaveLoading(false)
@@ -143,10 +138,10 @@ const App = () => {
   }
 
   const handleSubmit = (form: Receipt) => {
-    if (adding) {
-      doAdd(form)
-    } else {
+    if (form.id) {
       doEdit(form)
+    } else {
+      doAdd(form)
     }
   }
   return (
@@ -162,13 +157,13 @@ const App = () => {
         </Button>
       </div>
       <Table
-        dataSource={tableData}
+        dataSource={tableData.list}
         loading={loading}
         rowKey="id"
         bordered
         sticky={!testing}
         pagination={{
-          total: total,
+          total: tableData.total,
           current: params._page,
           pageSize: params._limit,
           pageSizeOptions: [PAGE_SIZE, PAGE_SIZE * 2, 50, 100],
@@ -244,14 +239,13 @@ const App = () => {
         />
       </Table>
       <Modal
-        title={adding ? '新增收货' : '编辑收货'}
+        title={form?.id ? '编辑收货' : '新增收货'}
         open={dialogVisible}
         onCancel={handleCancel}
         footer={null}
       >
         <SaveForm
-          initialValues={{ ...form }}
-          opened={dialogVisible}
+          initialValues={form}
           loading={saveLoading}
           onSubmit={handleSubmit}
           onCancle={handleCancel}

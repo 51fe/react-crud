@@ -3,18 +3,12 @@ import { DatePickerProps } from 'antd'
 export { }
 declare global {
   type Moment = DatePickerProps['value']
-
-  type BaseValue = string | number
-
-  type SelectValue = BaseValue | BaseValue[]
+  type RawValue =  string | number
 
   interface Option {
     label: string
-    value: BaseValue
-    children?: Array<{
-      label: string
-      value: BaseValue
-    }>
+    value: RawValue
+    children?: Omit<Option, 'children'>[];
   }
 
   interface PageTable<T> {
@@ -29,7 +23,12 @@ declare global {
     _order: string
   }
 
-  type FormRule<T> = {
-    [key in keyof T]: AggregationRule[]
+  interface FormItemRule  {
+    required?: boolean;
+    message: string;
+    pattern?: RegExp;
+    min?: number;
+    max?: number;
+    trigger?: string | string[];
   }
 }

@@ -1,4 +1,5 @@
 import './index.scss'
+import { SelectValue } from 'antd/lib/select'
 import { SearchOutlined } from '@ant-design/icons'
 import { Button, Form } from 'antd'
 import options from '../AreaCascader/area'

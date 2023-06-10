@@ -1,15 +1,20 @@
 import { Select } from 'antd'
+import { DefaultOptionType, SelectValue } from 'antd/lib/select'
 
 export interface BaseSelectProps {
-  options: Option[]
+  options: DefaultOptionType[]
   value?: SelectValue
+  mode?: 'multiple' | 'tags'
   onChange?: (value: SelectValue) => void
   placeholder?: string
 }
+
 const { Option } = Select
+
 const BaseSelect = ({
   options,
   value,
+  mode,
   onChange,
   placeholder = '请选择'
 }: BaseSelectProps) => {
@@ -25,10 +30,11 @@ const BaseSelect = ({
     <Select
       showSearch
       value={value}
+      mode={mode}
       placeholder={placeholder}
       optionFilterProp="children"
       filterOption={(input, option) =>
-        (option?.children as unknown as string)
+        (String(option?.label))
           .toLowerCase()
           .includes(input.toLowerCase())
       }

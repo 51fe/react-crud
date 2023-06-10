@@ -9,7 +9,7 @@ moment.locale('zh-cn')
 const AppProviders = ({ children }: { children: ReactNode }) => {
   return (
     <ConfigProvider locale={zhCN}>
-      { children }
+      {children}
     </ConfigProvider>
   )
 }
@@ -18,9 +18,13 @@ const customRender = (
   ui: ReactElement,
   options?: Omit<RenderOptions, 'wrapper'>
 ): RenderResult => render(
-  ui, 
+  ui,
   { wrapper: AppProviders, ...options }
 )
 
 export * from '@testing-library/react'
 export { customRender as render }
+export const sleep = (time = 0) =>
+  new Promise((resolve) =>
+    setTimeout(resolve, time)
+  )
