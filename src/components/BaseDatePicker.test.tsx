@@ -17,12 +17,13 @@ test('changes props correctly', () => {
 })
 
 test('calls "onChange"', async () => {
+  const user = userEvent.setup()
   const handleChange = jest.fn()
   render(<BaseDatePicker value="2022-08-02" onChange={handleChange}/>)
   const value = '2022-08-15'
   const input = screen.getByRole('textbox')
-  await userEvent.click(input)
-  fireEvent.click(screen.getByTitle(value))
+  user.click(input)
+  fireEvent.click(await screen.findByTitle(value))
   expect(handleChange).toHaveBeenCalledWith(value + ' 00:00:00')
 })
 

@@ -19,13 +19,14 @@ test('changes props correctly', () => {
 })
 
 test('calls "onChange"', async () => {
+  const user = userEvent.setup()
   const handleChange = jest.fn()
   render(<AreaCascader onChange={handleChange} />)
   const areas = ['广东省', '深圳市', '南山区']
   // actives the dropdown menu by clicking the input
-  await userEvent.click(screen.getByRole('combobox'))
+  user.click(screen.getByRole('combobox'))
   // emits the event by clicking the area
-  fireEvent.click(screen.getByText(areas[0]))
+  fireEvent.click(await screen.findByText(areas[0]))
   fireEvent.click(screen.getByText(areas[1]))
   fireEvent.click(screen.getByText(areas[2]))
   expect(handleChange.mock.calls[0][0]).toBe(440305)

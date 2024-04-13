@@ -20,12 +20,13 @@ test('calls pagination when click the pager number', () => {
 })
 
 test('calls pagination when click the page size item', async() => {
+  const user = userEvent.setup()
   const onPagination = jest.fn()
   const limit = 30
   render(<BasePagination total={32} showSizeChanger pagination={onPagination} />)
   const select = screen.getByRole('combobox', { name: /页码/})
-  await userEvent.click(select)
-  const item = screen.getByTitle(`${limit} 条/页`)
+  user.click(select)
+  const item = await screen.findByTitle(`${limit} 条/页`)
   // click the second item
   fireEvent.click(item)
   expect(onPagination).toHaveBeenCalledWith(1, limit)

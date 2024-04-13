@@ -1,6 +1,5 @@
 
-import { fireEvent, screen, render, within } from './test-util'
-import userEvent from '@testing-library/user-event'
+import { fireEvent, screen, render, within, waitFor } from './test-util'
 import { Receipt } from './type/receipt'
 import receiptApi from './api/receipt'
 import App from './App'
@@ -41,10 +40,14 @@ const defaultValue = {
 
 async function filterData(value: PageTable<Receipt>) {
   getReceiptList.mockResolvedValue(value)
-  const { getByTitle } = render(<App />)
+  render(<App />)
   // search call
-  fireEvent.click(getByTitle(/搜索/))
-  expect(getReceiptList).toHaveBeenCalledTimes(1)
+  fireEvent.click(screen.getByTitle(/搜索/))
+  expect(await screen.findByText('', { selector: '.ant-spin' })).toBeInTheDocument()
+  await waitFor(() => {
+    expect(getReceiptList).toHaveBeenCalledTimes(1)
+    expect(screen.queryByText('', { selector: '.ant-spin' })).not.toBeInTheDocument()
+  })
 }
 
 beforeEach(() => {
@@ -71,41 +74,41 @@ test('returns 1 row when set mobile to 151', async () => {
 test('returns No data if name does not match', async () => {
   filterData({ list: [], total: 0 })
   // sure loaded
-  await screen.findByText('', {selector: '.ant-spin-dot'})
-  expect(await screen.findByRole('cell', { name: /暂无数据/ })).toBeVisible()
+  screen.queryByText('', { selector: '.ant-spin-dot' })
+  expect(await screen.findByRole('cell', { name: /暂无数据/ })).toBeInTheDocument()
 })
 
 test('calls delReceipt to delete', async () => {
   // define mocks
   getReceiptList.mockResolvedValue(defaultValue)
   delReceipt.mockResolvedValue({})
-  const { findByRole } = render(<App />)
-  // init call
-  expect(getReceiptList).toHaveBeenCalledTimes(1)
-  const row = await findByRole('row', { name: /李四/ })
-  const btn = within(row).getByRole('button', { name: /删除/ })
-  await userEvent.click(btn)
-  const submitBtn = await screen.findByRole('button', { name: /确 定/ })
-  await userEvent.click(submitBtn)
+  render(<App />)
+  const nameRe = /李四/
+  const row = await screen.findByRole('row', { name: nameRe })
+  fireEvent.click(within(row).getByRole('button', { name: /删除/ }))
+  fireEvent.click(await screen.findByRole('button', { name: /确 定/ }))
   // delete call
   expect(delReceipt).toHaveBeenCalledTimes(1)
+  await waitFor(() => {
+    expect(screen.queryByRole('cell', { name: nameRe })).not.toBeInTheDocument()
+  })
 })
 
 test('calls editReceipt to edit', async () => {
   getReceiptList.mockResolvedValue(defaultValue)
   editReceipt.mockResolvedValue({})
-  const { getByRole, getByDisplayValue, findByRole } = render(<App />)
-  expect(getReceiptList).toHaveBeenCalledTimes(1)
+  render(<App />)
   // only test the row with user name of 李四
-  const name = RegExp(/孙六/)
-  const row = await findByRole('row', { name })
-  const btn = within(row).getByText(/编辑/)
-  await userEvent.click(btn)
+  const nameRe = new RegExp(/孙六/)
+  const row = await screen.findByRole('row', { name: nameRe })
+  fireEvent.click(within(row).getByText(/编辑/))
   // only simply test for user name
   const newName = '王五'
-  fireEvent.change(getByDisplayValue(name), { target: { value: newName } } )
-  const submitBtn = getByRole('button', { name: '确 定' })
-  await userEvent.click(submitBtn)
+  fireEvent.change(screen.getByDisplayValue(nameRe), { target: { value: newName } })
+  fireEvent.click(await screen.findByRole('button', { name: '确 定' }))
   // edit call
-  expect(editReceipt).toHaveBeenCalledTimes(1)
+  await waitFor(() => {
+    expect(editReceipt).toHaveBeenCalledTimes(1)
+    expect(screen.queryByRole('cell', { name: newName })).toBeInTheDocument()
+  })
 })

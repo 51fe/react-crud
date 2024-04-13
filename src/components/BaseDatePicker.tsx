@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { DatePicker } from 'antd'
+import { DatePicker, DatePickerProps } from 'antd'
 
 interface BaseDatePickerProps {
   id?: string
@@ -14,7 +14,7 @@ const BaseDatePicker = ({
   onChange,
   placeholder = '请选择'
 }: BaseDatePickerProps) => {
-  const handleChange = (value: Moment) => {
+  const handleChange = (value: DatePickerProps['value']) => {
     onChange?.(value?.format('YYYY-MM-DD 00:00:00') as string)
   }
   return (

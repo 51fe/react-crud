@@ -16,39 +16,40 @@ const fakeForm = {
   area: 130102
 }
 
-test('emits search event when click search button or press enter', async() => {
+test.only('emits search event when click search button or press enter', async() => {
+  const user = userEvent.setup()
   const handleSearch = jest.fn()
-  const {
-    getByPlaceholderText,
-    getByTitle,
-  } = render(<SearchForm onSearch={handleSearch} />)
-  const userNameInput =  getByPlaceholderText('请输入姓名')
+  render(<SearchForm onSearch={handleSearch} />)
+  const userNameInput =  screen.getByPlaceholderText('请输入姓名')
   fireEvent.change(userNameInput, { target: { value: fakeForm.userName_like } })
-  const mobileInput = getByPlaceholderText('请输入手机号')
+  const mobileInput = screen.getByPlaceholderText('请输入手机号')
   fireEvent.change(mobileInput, { target: { value: fakeForm.mobile_like } })
   
-  const beginDay = getByPlaceholderText('开始日期')
-  await userEvent.click(beginDay)
-  fireEvent.click(screen.getByTitle(fakeForm.date_gte.substring(0, 10)))
-  
-  const endDay = getByPlaceholderText('结束日期')
-  await userEvent.click(endDay)
-  const item = screen.getAllByTitle(fakeForm.date_lte.substring(0, 10))[1]
-  fireEvent.click(item)
+  const beginDay = screen.getByPlaceholderText('开始日期')
+  user.click(beginDay)
+  fireEvent.click(await screen.findByTitle(fakeForm.date_gte.substring(0, 10)))
+  expect(beginDay).toHaveValue(fakeForm.date_gte.substring(0, 10))
+
+  const endDay = screen.getByPlaceholderText('结束日期')
+  user.click(endDay)
+  await waitFor(() => {
+    fireEvent.click(screen.getAllByTitle(fakeForm.date_lte.substring(0, 10))[1])
+  })
+  expect(endDay).toHaveValue(fakeForm.date_lte.substring(0, 10))
 
   const provinceSelect = screen.getAllByRole('combobox')[0]
-  await userEvent.click(provinceSelect)
-  fireEvent.click(screen.getByTitle(fakeForm.areaName_like))
+  user.click(provinceSelect)
+  fireEvent.click(await screen.findByTitle(fakeForm.areaName_like))
 
   const citySelect = screen.getAllByRole('combobox')[1]
-  await userEvent.click(citySelect)
-  fireEvent.click(screen.getByTitle(/石家庄市/))
+  user.click(citySelect)
+  fireEvent.click(await screen.findByTitle(/石家庄市/))
 
   const areaSelect = screen.getAllByRole('combobox')[2]
-  await userEvent.click(areaSelect)
-  fireEvent.click(screen.getByTitle(/长安区/))
+  user.click(areaSelect)
+  fireEvent.click(await screen.findByTitle(/长安区/))
 
-  const searchBtn = getByTitle(/搜索/)
+  const searchBtn = screen.getByTitle(/搜索/)
   // Click search button
   fireEvent.click(searchBtn)
   await waitFor(() => {

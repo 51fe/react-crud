@@ -38,12 +38,13 @@ test('changes props correctly', async () => {
 })
 
 test('calls "onChange"', async () => {
+  const user = userEvent.setup()
   const handleChange = jest.fn()
   setUp({
     onChange: handleChange
   })
   const select = screen.getByRole('combobox')
-  await userEvent.click(select)
-  fireEvent.click(screen.getByTitle(/电信/))
+  user.click(select)
+  fireEvent.click(await screen.findByTitle(/电信/))
   expect(handleChange).toHaveBeenCalledWith( 3, { children: '电信', key: '3', value: 3 })
 })
