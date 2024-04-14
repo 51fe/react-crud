@@ -1,4 +1,4 @@
-import { Receipt } from '../type/receipt'
+import { type Receipt } from '../type/receipt'
 import http from '../utils/http'
 
 const url = '/receipts'

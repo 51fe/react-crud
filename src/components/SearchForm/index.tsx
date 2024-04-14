@@ -6,7 +6,7 @@ import options from '../AreaCascader/area'
 import BaseDatePicker from '../BaseDatePicker'
 import BaseInput from '../BaseInput'
 import BaseSelect from '../BaseSelect'
-import { ReceiptQuery } from '../../type/receipt'
+import { type ReceiptQuery } from '../../type/receipt'
 import { useState } from 'react'
 
 interface SearchProps {

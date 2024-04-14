@@ -4,7 +4,7 @@ import { Button, Form, Space } from 'antd'
 import AreaCascader from '../AreaCascader'
 import BaseInput from '../BaseInput'
 import BaseDatePicker from '../BaseDatePicker'
-import { Receipt } from '../../type/receipt'
+import { type Receipt } from '../../type/receipt'
 import { rules } from '../../utils/rules'
 
 interface SaveFormProps {

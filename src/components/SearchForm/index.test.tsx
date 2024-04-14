@@ -16,7 +16,7 @@ const fakeForm = {
   area: 130102
 }
 
-test.only('emits search event when click search button or press enter', async() => {
+test('emits search event when click search button or press enter', async() => {
   const user = userEvent.setup()
   const handleSearch = jest.fn()
   render(<SearchForm onSearch={handleSearch} />)
